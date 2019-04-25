@@ -58,13 +58,13 @@ table td {
 
 
  <div class="col-md-3">
-  <select type="text" id="rate_perkg" placeholder="rate_perkg" class="form-control"></select>
+  <input type="text" id="rate_perkg" placeholder="rate_perkg" class="form-control" readonly>
  </div>
 <div class="col-md-3">
   <input type="text" id="quantity" placeholder="quantity" class="form-control">
  </div>
   <div class="col-md-3">
-  <input type="text" id="rate" placeholder="rate" class="form-control">
+  <input type="text" id="rate" placeholder="rate" class="form-control" readonly>
  </div>
   
 </div>
@@ -73,36 +73,59 @@ table td {
 </form>
 </div>
 </div>
-<table>
-  <thead>
-    <tr>  
-      <th>Select</th>
-      <th>product name</th>
-      <th>quantity</th>
-      <th>rate</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td>
-        <input type="checkbox" name="record">
-      </td>
-      <td>Ghee</td>
-      <td>500 g</td>
-      <td>12</td>
-    </tr>
-  </tbody>
-</table>
+<form action="/daily-entry" method="POST">
+  {{ csrf_field() }}
+  <div class="formsbt">
+    cake:name<p><input type='text' name='recipe_name' class='form-control'></p>
+    
+  </div>
+  <input type="text" name='recipe_price' readonly value="0" id="total_amnt" class='form-control'><br>
+  <input type='submit' class='btn btn-block btn-primary btn-lg' value='Submit'><br>
+</form>
 <button type="button" class="delete-row btn btn-block btn-primary btn-lg">Delete Row</button>
+
+
+
+<div class="box">
+            <div class="box-header">
+              <h3 class="box-title">Data Table With Full Features</h3>
+            </div>
+            <!-- /.box-header -->
+            <div class="box-body">
+              <table id="example1" class="table table-bordered table-striped">
+                <thead>
+                <tr>
+                  <th>Recipe Name</th>
+                  <th>Recipe Price</th>
+                  <th>Print</th>
+                </tr>
+                </thead>
+                <tbody>
+                  @foreach ($recipe_datas as $recipe_data)
+                <tr>
+                  <td>{{$recipe_data['recipe_name']}}</td>
+                  <td>{{$recipe_data['recipe_price']}}</td>
+                  <td><a href="/print/{{$recipe_data['id']}}/" class="btn btn-success">print</td></td>
+                  </tr>
+                  @endforeach
+                 </tbody>
+              </table>
+            </div>
+</div>
 <script>
 $(document).ready(function() {
+  var i=1;
   $(".add-row").click(function() {
-    var product_name = $("#product_name").val();
+    var product_name = $("#product_name option:selected").text();
+    var rate_perkg = $("#rate_perkg").val();
     var quantity = $("#quantity").val();
      var rate = $("#rate").val();
 
-    var markup = "<tr><td><input type='checkbox' name='record'></td><td>" + product_name + "</td><td>" + quantity + "</td><td>" + rate + "</td></tr>";
-    $("table tbody").append(markup);
+    
+     
+    var markup = "<div class='row'><div class='col-md-2'><input type='checkbox'  name='record'></div><div class='col-md-2'><input type='text' value="+ product_name + " name='product_name[]' class='form-control'></div><div class='col-md-2'><input type='text' value="+ rate_perkg + " name='rate_per_kg[]' class='form-control'></div><div class='col-md-2'><input type='text' value="+ quantity + " name='quantity[]' class='form-control'></div><div class='col-md-2'><input type='text' value="+ rate + " name='rate[]' class='form-control'></div></div><br>"; i++;
+    $(".formsbt").append(markup);
+    
   });
 
   // Find and remove selected table rows
@@ -122,18 +145,15 @@ $(document).ready(function() {
     if(product_name){
         $.ajax({
            type:"GET",
-           url:"{{url('layers/get-product-list')}}?id="+product_name,
-
-           success:function(res){               
+           url:"{{url('layers/get-product-list')}}",
+           data:{"id":product_name},
+           success:function(res){  
+                        
             if(res){
-                $("#rate_perkg").empty();
-                $("#rate_perkg").append('<option>Select</option>');
-                $.each(res,function(key,value){
-                    $("#rate_perkg").append('<option value="'+key+'">'+value+'</option>');
-                });
-           
+                $("#rate_perkg").val('');
+                $("#rate_perkg").val(res);           
             }else{
-               $("#rate_perkg").empty();
+               $("#rate_perkg").val('');
             }
            }
         });
@@ -142,5 +162,44 @@ $(document).ready(function() {
         
     }      
    });
+
+
+   
+
+    
 </script>
+@endsection
+
+
+@section('javascript')
+
+<script>
+    
+$(document).ready(function(){
+  $("#quantity").keyup(function(){
+
+var rate=$('#rate_perkg').val();
+var quantity=$('#quantity').val();
+
+          var total= parseFloat(rate)*parseFloat(quantity);
+
+          $('#rate').val(total);
+    });
+});
+
+
+$(document).ready(function(){
+  $(".add-row").click(function(){
+
+var rate=$('#rate').val();
+var tot=$('#total_amnt').val();
+var sum=0;
+var sum=parseInt(tot)+parseInt(rate);
+
+          $('#total_amnt').val(sum);
+    });
+});
+</script>
+
+
 @endsection

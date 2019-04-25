@@ -3,8 +3,9 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-
+use App\Recipe;
 use App\Layer;
+use App\RecipeSub;
 use DB;
 
 class LayersController extends Controller
@@ -78,15 +79,26 @@ $this->validate($request, $validate);
      public function recipe()
     {
     	$layers['layers']=Layer::all();
-    	return view('dashboard.add-recipe',$layers);
+        $recipe_datas['recipe_datas']=Recipe::all();
+
+    	return view('dashboard.add-recipe',$layers,$recipe_datas);
     }
-   public function get_product_list($id)
+   public function get_product_list(request $request)
    {
-   	dd($id); 
-   	$states = DB::table("layers")
-                    ->where("id",$request->pid)
-                    ->lists("product_name","product_price");
-        return response()->json($states);
+   	
+   	$price = DB::table("layers")
+                    ->where("id",$request->id)->value('product_price');
+                 
+        return response()->json($price);
+   }
+
+   public function prints($id)
+   {
+      $datas= Recipe::with('RecipeSub')->where('id',$id)->first();
+      //echo $datas;
+
+return view('dashboard.print',compact('datas'));
+      
    }
 
 }
