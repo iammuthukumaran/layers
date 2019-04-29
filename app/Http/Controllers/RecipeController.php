@@ -13,6 +13,16 @@ class RecipeController extends Controller
     public function store(Request $request)
     {
         //
+      $validate=[
+'recipe_name'=> 'required|max:60|min:3',
+'recipe_price'=> 'required|max:10',
+'product_name'=> 'required|max:60|',
+'rate_per_kg'=> 'required|max:10',
+'quantity'=> 'required|max:60|',
+'rate'=> 'required|max:10'
+];
+
+$this->validate($request, $validate);
                 
 $recipe_entry=Recipe::create(['recipe_name'=>$request->recipe_name,'recipe_price'=>$request->recipe_price])->id;
         for($i=0;$i<=count($request->quantity);$i++)
@@ -32,7 +42,7 @@ $recipe_entry=Recipe::create(['recipe_name'=>$request->recipe_name,'recipe_price
         }
 
     	
-    		return back();
+    	return	redirect('/recipe-pagination');
     		
 }
 }

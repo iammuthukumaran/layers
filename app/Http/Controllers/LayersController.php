@@ -52,7 +52,7 @@ $this->validate($request, $validate);
 
     {
         $validate=[
-'product_name'=> 'required|max:60|min:3|unique:layers',
+'product_name'=> 'required|max:60|min:3',
 'product_price'=> 'required|max:4'
 ];
 
@@ -79,9 +79,12 @@ $this->validate($request, $validate);
      public function recipe()
     {
     	$layers['layers']=Layer::all();
-        $recipe_datas['recipe_datas']=Recipe::all();
+        //$recipe_datas['recipe_datas']=Recipe::all();
+       // $recipe_datas['recipe_datas'] = Recipe::orderBy('id', 'desc')->take(5)->get();
 
-    	return view('dashboard.add-recipe',$layers,$recipe_datas);
+     // $recipe_datas['recipe_datas'] = Recipe::paginate(3);
+
+    	return view('dashboard.add-recipe',$layers);
     }
    public function get_product_list(request $request)
    {
@@ -98,6 +101,24 @@ $this->validate($request, $validate);
       //echo $datas;
 
 return view('dashboard.print',compact('datas'));
+      
+   }
+    public function delete_recipe_details($id)
+   {
+     Recipe::where('id',$id)->delete();
+        RecipeSub::where('recipe_id',$id)->delete();
+     // dd($datas);
+
+return back();
+      
+   }
+   public function pagination()
+   {
+     $recipe_datas['recipe_datas'] = Recipe::orderBy('id', 'desc')->paginate(3);
+
+      return view('dashboard.recipes',$recipe_datas);
+
+
       
    }
 

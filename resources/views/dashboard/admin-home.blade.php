@@ -21,7 +21,7 @@
                   <input type="text" class="form-control" placeholder="Product Name" name="product_name" {{$errors->has('product_name') ?  'alert alert-danger' : ''}}" value="{{ old('name') }}">
                 </div>  
                  <div class="form-group">
-                  <label>Price</label>
+                  <label>Price Per KG/Litter</label>
                   <input type="text" class="form-control" placeholder="Enter Price" name="product_price"  {{$errors->has('product_price') ?  'alert alert-danger' : ''}}" value="{{ old('price') }}">
                 </div>                 
                       
@@ -58,7 +58,7 @@
    
       <tr>
         <td>{{$layer['product_name']}}</td>
-        <td>{{$layer['product_price']}}</td>
+        <td>{{number_format($layer['product_price'],2)}}</td>
         
           <td><a href="edit/{{$layer['id']}}/" class="btn btn-success">edit</td>
             <td><a href="delete/{{$layer['id']}}" onclick="return confirm('Are you sure want to delete this record?')" class="btn btn-danger">delete</td>

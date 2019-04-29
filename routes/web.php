@@ -24,6 +24,8 @@ Route::get('/recipe','LayersController@recipe');
 Route::get('layers/get-product-list','LayersController@get_product_list');
 Route::post('/daily-entry','RecipeController@store');
 Route::get('/print/{id}','LayersController@prints');
+Route::get('/recipe-details-delete/{id}','LayersController@delete_recipe_details');
+Route::get('/recipe-pagination/','LayersController@pagination');
 
 
 
