@@ -1,4 +1,46 @@
-@import url(https://fonts.googleapis.com/css?family=Raleway:300,400,600);@charset "UTF-8";/*!
+@import url(https://fonts.googleapis.com/css?family=Raleway:300,400,600);@charset "UTF-8";
+.skin-blue .main-header .navbar {
+    background-color: #675d56 !important;
+}
+.skin-blue .main-header .logo:hover {
+    background-color: #675d56 !important;
+}
+.skin-blue .main-header .logo {
+    background-color: #675d56 !important;
+    color: #fff;
+    border-bottom: 0 solid transparent;
+}
+.skin-blue .wrapper, .skin-blue .main-sidebar, .skin-blue .left-side {
+    background-color: #675d56 !important;
+}
+.skin-blue .sidebar-menu>li.header {
+    color: #ffffff !important;
+    background: #675d56 !important;
+}
+.skin-blue .sidebar a {
+    color: #FFFFFF !important;
+}
+.btn-primary {
+    color: #fff;
+    background-color: #f48677 !important;
+    border-color: #f48677 !important;
+}
+.box.box-info {
+    border-top-color: #f48677 !important;
+}
+.pagination>.active>a, .pagination>.active>a:focus, .pagination>.active>a:hover, .pagination>.active>span, .pagination>.active>span:focus, .pagination>.active>span:hover {
+    z-index: 3;
+    color: #fff;
+    cursor: default;
+    background-color: #675d56 !important;
+    border-color: #675d56 !important;
+}
+
+.skin-blue .main-header .navbar .sidebar-toggle:hover {
+    background-color: #f48677 !important;
+}
+
+/*!
  * Bootstrap v3.3.7 (http://getbootstrap.com)
  * Copyright 2011-2016 Twitter, Inc.
  * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)

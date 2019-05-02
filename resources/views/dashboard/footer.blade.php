@@ -2,7 +2,7 @@
     <div class="pull-right hidden-xs">
       
     </div>
-    <strong>Copyright &copy; <a href="{{ url('admin') }}">Layers</a>.</strong> All rights
+    <strong>Copyright &copy; <a style="color: #f48677;" href="{{ url('') }}">Layers</a>.</strong> All rights
     reserved.
   </footer>
  

@@ -1,4 +1,5 @@
 @extends('dashboard.dashboard')
+@section('title', 'Edit Products')
 @section('inner-content')
  <!-- Content Header (Page header) 
  <section class="content-header">
@@ -13,7 +14,7 @@
             <!-- /.box-header -->
            <?php // print_r ($layers); die(); ?>
             <div class="box-body">
-              <form role="form" method="POST" action="/{{$layer->id}}/dashboard/update/">
+              <form role="form" method="POST" action="/dashboard/update/{{$layer->id}}">
               	{{ csrf_field() }}
                 <!-- text input -->
                 <div class="form-group">
@@ -22,7 +23,7 @@
                 </div>  
                  <div class="form-group">
                   <label>Price</label>
-                  <input type="text" class="form-control" placeholder="Enter Price" name="product_price" value="{{$layer['product_price']}}" {{$errors->has('product_price') ?  'alert alert-danger' : ''}}">
+                  <input type="number" class="form-control" placeholder="Enter Price" name="product_price" value="{{$layer['product_price']}}" {{$errors->has('product_price') ?  'alert alert-danger' : ''}}">
                 </div>                 
                       
              <button type="submit" class="btn btn-block btn-primary btn-lg">update Product</button>                   

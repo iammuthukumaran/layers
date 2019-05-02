@@ -7,21 +7,27 @@ use App\Recipe;
 use App\Layer;
 use App\RecipeSub;
 use DB;
+use Carbon\Carbon;
 
 class LayersController extends Controller
 {
     //
+  public function __construct()   
+     {      
+       $this->middleware('auth');  
+         }
+
     public function index()
     {
-    	$layers['layers']=Layer::all();
+    	$layers['layers']=Layer::orderBy('id', 'desc')->paginate(3);
     	return view('dashboard.admin-home',$layers);
     }
 
     public function store(Request $request)
     {
     	$validate=[
-'product_name'=> 'required|max:60|min:3|unique:layers',
-'product_price'=> 'required|max:4'
+'product_name'=> 'required|max:60|min:3|regex:/^[a-zA-Z]+$/u|unique:layers',
+'product_price'=> 'required|max:10'
 ];
 
 $this->validate($request, $validate);
@@ -48,12 +54,14 @@ $this->validate($request, $validate);
           $layer['layer']=Layer::find($id);
           return view('dashboard.edit',$layer);
     }
+
     public function update(Request $request,$id)
 
     {
+      $layer['layer']=Layer::all();
         $validate=[
-'product_name'=> 'required|max:60|min:3',
-'product_price'=> 'required|max:4'
+'product_name'=> 'regex:/^[a-zA-Z ]+$/|unique:layers,product_name,'.$request->id,
+'product_price'=> 'required|max:10'
 ];
 
 $this->validate($request, $validate);
@@ -65,7 +73,7 @@ $this->validate($request, $validate);
         
     ];
         Layer::where('id',$request->id)->update($input);
-        return redirect('/admin');
+        return redirect('');
     
     }
      public function delete($id)
@@ -122,4 +130,34 @@ return back();
       
    }
 
+      public function report(request $request)
+   {
+    
+
+
+    return view('dashboard.report');
+   }
+
+
+public function get_report(request $request)
+   {
+    
+  $from    = Carbon::parse($request->from_date)
+                 ->startOfDay()        
+                 ->toDateTimeString(); 
+
+$to      = Carbon::parse($request->to_date)
+                 ->endOfDay()          
+                 ->toDateTimeString();
+                // dd($from);
+                  $input['input']=[
+        'from'=>$request['from_date'],
+        'to'=>$request['to_date'],        
+    ];
+
+   $recipe_details['recipe_details']= Recipe::whereBetween('created_at', [$from, $to])->get()->toArray();
+//dd($input);
+      return view('dashboard.report-details',$recipe_details,$input);
+  
+   }
 }

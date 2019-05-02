@@ -1,4 +1,5 @@
 @extends('dashboard.dashboard')
+@section('title', 'Add Product Details')
 @section('inner-content')
 <head>
 
@@ -37,7 +38,7 @@ table td {
 <form name="form1" action="#">
    
  <!-- <input type="text" id="product_name" placeholder="product name"> -->
- <div class="box box-info">
+ <div class="box box-info field">
             <div class="box-header with-border">
               <h3 class="box-title">Add Recipe Details</h3>
             </div>
@@ -62,20 +63,21 @@ table td {
 
  <div class="col-md-3">
    <label>Rate Per KG/Litter</label>
-  <input type="text" id="rate_perkg" placeholder="Rate Per KG/Litter" class="form-control" name='rate_perkg' readonly required>
+  <input type="number" id="rate_perkg" placeholder="Rate Per KG/Litter" class="form-control" name='rate_perkg' readonly required>
  </div>
 <div class="col-md-3">
   <label>Quantity</label>
-  <input type="text" id="quantity" placeholder="Quantity" class="form-control allownumericwithoutdecimal" name='quantity'/>
+  <input type="number" id="quantity" placeholder="Quantity" class="form-control allownumericwithoutdecimal" name='quantity'/>
  </div>
   <div class="col-md-3">
     <label>Rate</label>
-  <input type="text" id="rate"  placeholder="Rate" class="form-control" name='rate' readonly required>
+  <input type="number" id="rate"  placeholder="Rate" class="form-control" name='rate' readonly required>
  </div>
   
 </div>
 <br>
-<input type="button" class="add-row btn btn-block btn-primary btn-lg" value="Add Row" onclick="allnumericplusminus()" />
+<div class='actions'>
+<input type="button" class="add-row btn btn-block btn-primary btn-lg" value="Add Row" onclick="allnumericplusminus()" / disabled="disabled" /></div>
 </form>
 </div>
 </div>
@@ -105,7 +107,7 @@ table td {
   <button type="submit" class="btn btn-block btn-primary btn-lg" id="recipe_pricesbt"  />submit</button><br>
 
   </form>
-<button type="button" class="delete-row btn btn-block btn-danger btn-lg">Delete Row</button><br>
+<button type="button" class="delete-row btn btn-block btn-danger btn-lg" >Delete Row</button><br>
 </div></div>
 
   @if ($errors->any())
@@ -128,12 +130,12 @@ table td {
 function allnumericplusminus()
    {
     //$('#rate').val('');
-      var numbers = /(?=[^\0])(?=^([0-9]+){0,1}(\.[0-9]{1,2}){0,1}$)/;
+      var numbers = /(?=[^\0])(?=^([0-9]+){0,1}(\.[0-9]{1,2})(\.[0-9]{1,2}){0,1}$)/;
       var rate_perkg = document.getElementById("rate_perkg").value;
 var quantity = document.getElementById("quantity").value;
 var raterate = document.getElementById("rate").value;
 
-      if(rate_perkg.match(numbers) && quantity.match(numbers) && raterate.match(numbers) )
+     if(Number(rate_perkg) )
       {
        // $("#product_name option:selected").val('s');
      var product_name = $("#product_name option:selected").text();
@@ -151,25 +153,22 @@ var raterate = document.getElementById("rate").value;
 
   
      
-    var markup = "<div class='row dlt'><div class='col-md-2'><input type='checkbox'  name='record'></div><div class='col-md-2'><input type='hidden' value="+ product_id + " name='product_name[]'><input type='text' value="+ product_name + " class='form-control'></div><div class='col-md-2'><input type='text' value="+ Number (rate_perkg).toFixed(2) + " name='rate_per_kg[]' class='form-control' readonly></div><div class='col-md-2'><input type='text' value="+ Number (quantity).toFixed(2)  + " name='quantity[]' class='form-control' readonly></div><div class='col-md-2'><input type='text' value="+ rate + " name='rate[]' class='form-control total_rate' readonly></div></div><br>"; 
+    var markup = "<div class='row dlt'><div class='col-md-2'><input type='checkbox' class='record' name='record' value='1' onchange='deletebtn()'/></div><div class='col-md-2'><input type='hidden' value="+ product_id + " name='product_name[]'><input type='text' value="+ product_name + " class='form-control' readonly></div><div class='col-md-2'><input type='text' value="+ Number (rate_perkg).toFixed(2) + " name='rate_per_kg[]' class='form-control' readonly></div><div class='col-md-2'><input type='text' value="+ quantity + " name='quantity[]' class='form-control' readonly></div><div class='col-md-2'><input type='text' value="+ rate + " name='rate[]' class='form-control total_rate' readonly></div></div><br>"; 
     $(".formsbt").append(markup);
       return true;
       }
       else
       {
-      alert('Please fill all inputs');
+      alert('Please Select a Product');
     $('#rate').val('');
       return true;
-      }
+      } 
    }
 </script>
 <script>
 $(document).ready(function() {
   
-  $(".add-row").click(function() {
-
-    
-  });
+ 
 
   // Find and remove selected table rows
 $(".delete-row").click(function() {
@@ -186,6 +185,7 @@ $('.total_rate').each(function() {
 sum +=Number($(this).val());
 });
 $('#total_amnt').val(Number(sum).toFixed(2));
+$(".delete-row").hide();
 });
 }); 
 
@@ -271,6 +271,7 @@ var sum=0;
 var sum=parseFloat(tot)+parseFloat(rate);
 if(isNaN)
           $('#total_amnt').val(Number(sum).toFixed(2));
+         $('.add-row').attr('disabled',true);
       }
     });
 });
@@ -302,6 +303,35 @@ $('#form2').submit(function () {
         alert('Please Enter the Recipe Name.');
         return false;
     }
+});
+
+function deletebtn()
+{
+    if($('.record').is(":checked"))   
+        $(".delete-row").show();
+    else
+        $(".delete-row").hide();
+}
+
+$(".delete-row").hide();
+
+
+$(document).ready(function() {
+    $('.field input').keyup(function() {
+
+        var empty = false;
+        $('.field input').each(function() {
+            if ($(this).val().length == 0) {
+                empty = true;
+            }
+        });
+
+        if (empty) {
+            $('.actions input').attr('disabled', 'disabled');
+        } else {
+            $('.actions input').removeAttr('disabled');
+        }
+    });
 });
 
 

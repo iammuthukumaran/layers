@@ -14,4 +14,8 @@ class Recipe extends Model
     {
     	return $this->hasMany('App\RecipeSub','recipe_id','id');
     }
+    public function Report()
+    {
+    	return $this->hasMany('App\RecipeSub','created_at','created_at');
+    }
 }
