@@ -28,6 +28,14 @@
 
   <!-- Google Font -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
+  <style>
+  .login-page, .register-page {
+    background: #67564a !important;
+}
+.login-logo a, .register-logo a {
+    color: #ffffff !important;
+}
+</style>
 </head>
 <body class="hold-transition login-page">
 <div class="login-box">

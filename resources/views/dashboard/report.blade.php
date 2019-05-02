@@ -2,9 +2,9 @@
 @section('title', 'Add Products')
 @section('inner-content')
 
-<div class="box box-primary">
-            <div class="box-header">
-              <h3 class="box-title">Date picker</h3>
+<div class="box box-info field">
+            <div class="box-header with-border">
+              <h3 class="box-title">Select date</h3>
             </div>
             <div class="box-body">
 <div class="form-group">
