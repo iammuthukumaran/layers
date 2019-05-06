@@ -28,6 +28,9 @@ Route::get('/recipe-details-delete/{id}','LayersController@delete_recipe_details
 Route::get('/recipe-pagination/','LayersController@pagination');
 Route::get('report','LayersController@report');
 Route::post('get-report','LayersController@get_report');
+Route::get('change-password','LayersController@change_password')->name('change-password');
+Route::post('update-password','LayersController@update_password')->name('update-password');
+
 
 
 

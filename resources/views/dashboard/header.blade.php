@@ -37,6 +37,14 @@
                                             {{ csrf_field() }}
                                         </form>
                                     </li>
+                                    <li>
+                                        <a href="{{ route('change-password') }}"
+                                            >
+                                            Change Password
+                                        </a>
+
+                                        
+                                    </li>
                                 </ul>
                             </li>
           <!-- Messages: style can be found in dropdown.less-->

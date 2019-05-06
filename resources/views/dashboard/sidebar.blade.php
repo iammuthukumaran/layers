@@ -66,6 +66,14 @@
           </a>
           
         </li>
+        <li class=" ">
+          <a href="{{ url('/register') }}">
+            <i class="fa fa-pie-chart"></i>
+            <span>Register</span>
+           
+          </a>
+          
+        </li>
         </ul>
     </section>
     <!-- /.sidebar -->

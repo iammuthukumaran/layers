@@ -6,8 +6,13 @@ use Illuminate\Http\Request;
 use App\Recipe;
 use App\Layer;
 use App\RecipeSub;
+
+use App\User;
 use DB;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
+
 
 class LayersController extends Controller
 {
@@ -27,7 +32,7 @@ class LayersController extends Controller
     {
     	$validate=[
 'product_name'=> 'required|max:60|min:3|regex:/^[a-zA-Z]+$/u|unique:layers',
-'product_price'=> 'required|max:10'
+'product_price'=> 'required|max:10|integer|min:0'
 ];
 
 $this->validate($request, $validate);
@@ -61,7 +66,7 @@ $this->validate($request, $validate);
       $layer['layer']=Layer::all();
         $validate=[
 'product_name'=> 'regex:/^[a-zA-Z ]+$/|unique:layers,product_name,'.$request->id,
-'product_price'=> 'required|max:10'
+'product_price'=> 'required|max:10|integer|min:0'
 ];
 
 $this->validate($request, $validate);
@@ -142,22 +147,48 @@ return back();
 public function get_report(request $request)
    {
     
-  $from    = Carbon::parse($request->from_date)
-                 ->startOfDay()        
-                 ->toDateTimeString(); 
+            $from    = Carbon::parse($request->from_date)
+                           ->startOfDay()        
+                           ->toDateTimeString(); 
 
-$to      = Carbon::parse($request->to_date)
-                 ->endOfDay()          
-                 ->toDateTimeString();
-                // dd($from);
-                  $input['input']=[
-        'from'=>$request['from_date'],
-        'to'=>$request['to_date'],        
-    ];
+          $to      = Carbon::parse($request->to_date)
+                           ->endOfDay()          
+                           ->toDateTimeString();
+                          // dd($from);
+                            $input['input']=[
+                  'from'=>$request['from_date'],
+                  'to'=>$request['to_date'],        
+              ];
 
-   $recipe_details['recipe_details']= Recipe::whereBetween('created_at', [$from, $to])->get()->toArray();
-//dd($input);
-      return view('dashboard.report-details',$recipe_details,$input);
+             $recipe_details['recipe_details']= Recipe::whereBetween('created_at', [$from, $to])->get()->toArray();
+          //dd($input);
+                return view('dashboard.report-details',$recipe_details,$input);
   
    }
+      public function change_password()
+   {
+    return view('auth.passwords.change-password');
+   }
+         public function update_password(request $request)
+   {
+      $this->validate($request,[
+        'oldpassword'=>'required|min:6',
+        'password'=>'required|same:password|min:6',
+        'password-confirm'=>'required|same:password|min:6'
+      ]);
+      $hashed_password=Auth::user()->password;
+    if(Hash::check($request['oldpassword'], $hashed_password))
+      {           
+       // $user= Auth::User()->id;                       
+        $user = User::find(Auth::id());
+        $user->password = Hash::make($request['password']);;
+        $user->save(); 
+        Auth::logout();
+        return redirect()->route('login')->with('successMsg',"Password is changed successfully");
+      }
+      else{
+          return redirect()->back()->with('errorMsg',"Current Password is Incorrect");
+      }
+   }
+
 }

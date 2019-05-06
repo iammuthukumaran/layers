@@ -1,6 +1,6 @@
-@extends('layouts.app')
-
-@section('content')
+@extends('dashboard.dashboard')
+@section('title', 'Change Password')
+@section('inner-content')
 <div class="container">
     <div class="row">
         <div class="col-md-8 col-md-offset-2">
